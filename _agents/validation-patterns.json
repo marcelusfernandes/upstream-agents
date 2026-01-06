@@ -1,0 +1,109 @@
+{
+  "guardrail_patterns": {
+    "financial_violations": {
+      "dollar_amounts": {
+        "pattern": "\\$[\\d,]+-[\\d,]+(?!\\s*`\\[)",
+        "replacement": "Substantial investment `[AI estimation based on scope complexity]`",
+        "description": "Replace specific dollar ranges with qualified language"
+      },
+      "annual_savings": {
+        "pattern": "\\$[\\d,]+\\+ annually(?!\\s*`\\[)",
+        "replacement": "Significant annual value `[AI estimation based on operational efficiency]`",
+        "description": "Replace annual dollar amounts with conservative language"
+      },
+      "investment_costs": {
+        "pattern": "\\$[\\d,]+ investment(?!\\s*`\\[)",
+        "replacement": "Substantial investment `[AI estimation: enterprise automation program]`",
+        "description": "Replace specific investment amounts"
+      },
+      "roi_percentages": {
+        "pattern": "ROI of [\\d]+%-[\\d]+%(?!\\s*`\\[)",
+        "replacement": "Strong ROI potential `[AI estimation based on efficiency gains]`",
+        "description": "Replace specific ROI claims with qualified potential"
+      },
+      "cost_savings": {
+        "pattern": "saves? \\$[\\d,]+ annually(?!\\s*`\\[)",
+        "replacement": "generates significant annual value `[AI estimation based on efficiency improvements]`",
+        "description": "Replace cost savings claims with value language"
+      },
+      "worth_amounts": {
+        "pattern": "worth \\$[\\d,]+(?!\\s*`\\[)",
+        "replacement": "with substantial value `[AI estimation based on strategic capability development]`",
+        "description": "Replace worth claims with qualified value language"
+      }
+    },
+    "performance_violations": {
+      "percentage_improvements": {
+        "pattern": "[\\d]+%-[\\d]+% improvement(?!\\s*`\\[)",
+        "replacement": "Substantial improvement `[AI estimation based on automation potential]`",
+        "description": "Replace specific improvement percentages"
+      },
+      "percentage_reductions": {
+        "pattern": "[\\d]+%-[\\d]+% reduction(?!\\s*`\\[)",
+        "replacement": "Significant reduction `[AI estimation based on process optimization]`",
+        "description": "Replace specific reduction percentages"
+      },
+      "efficiency_gains": {
+        "pattern": "[\\d]+%-[\\d]+% efficiency gain(?!\\s*`\\[)",
+        "replacement": "Substantial efficiency improvement `[AI estimation based on workflow optimization]`",
+        "description": "Replace efficiency percentage claims"
+      },
+      "time_savings": {
+        "pattern": "[\\d]+%-[\\d]+% time savings(?!\\s*`\\[)",
+        "replacement": "Significant time reduction `[AI estimation based on automation scope]`",
+        "description": "Replace time savings percentages"
+      }
+    },
+    "resource_violations": {
+      "person_months": {
+        "pattern": "([\\d]+-[\\d]+) person-months(?!\\s*`\\[)",
+        "replacement": "Estimated effort: \\1 person-months `[AI estimation based on implementation complexity]`",
+        "description": "Add estimation tags to resource estimates"
+      },
+      "investment_phases": {
+        "pattern": "Investment: \\$[\\d,]+-[\\d,]+(?!\\s*`\\[)",
+        "replacement": "Investment: Substantial `[AI estimation based on integration scope]`",
+        "description": "Replace phase investment amounts with qualitative scale"
+      },
+      "implementation_costs": {
+        "pattern": "costs \\$[\\d,]+(?!\\s*`\\[)",
+        "replacement": "requires substantial investment `[AI estimation based on technical requirements]`",
+        "description": "Replace cost statements with investment language"
+      }
+    }
+  },
+  "validation_checks": {
+    "scan_patterns": [
+      "\\$[\\d,]+(?!\\s*`\\[)",
+      "[\\d]+%-[\\d]+%(?!\\s*`\\[)",
+      "ROI of [\\d]+%(?!\\s*`\\[)",
+      "saves? \\$[\\d,]+(?!\\s*`\\[)",
+      "costs \\$[\\d,]+(?!\\s*`\\[)",
+      "worth \\$[\\d,]+(?!\\s*`\\[)"
+    ]
+  },
+  "replacement_strategies": {
+    "financial_qualifiers": [
+      "Substantial investment",
+      "Significant annual value", 
+      "Strong ROI potential",
+      "Considerable value creation",
+      "Substantial cost reduction"
+    ],
+    "performance_qualifiers": [
+      "Significant improvement",
+      "Substantial reduction",
+      "Considerable enhancement",
+      "Notable efficiency gains",
+      "Meaningful optimization"
+    ],
+    "estimation_methodologies": [
+      "[AI estimation based on scope complexity]",
+      "[AI estimation based on operational efficiency]",
+      "[AI estimation based on automation potential]",
+      "[AI estimation based on process optimization]",
+      "[AI estimation based on implementation complexity]",
+      "[AI estimation: enterprise automation program]"
+    ]
+  }
+}

@@ -1,0 +1,1 @@
+Assuma as personlidade especificada pelo usuário (elas invocam rules especificas) e responda a entrevista ``@roteiro.md` e crie um arquivo com seu nome na pasta `entrevistas`
