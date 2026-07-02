@@ -3,7 +3,7 @@ version: "1.0.0"
 last_updated: "2025-10-16"
 author: "Marcelus Fernandes"
 template_type: "granular_painpoint_list"
-used_by: ["agent-2a-painpoint-granularization-specialist.md"]
+used_by: [".claude/agents/painpoint-decomposer.md"]
 purpose: "Structure atomic pain point catalog from decomposition process"
 ---
 

@@ -3,7 +3,7 @@ version: "1.0.0"
 last_updated: "2025-09-02"
 author: "Marcelus Fernandes"
 template_type: "strategic_roadmap"
-used_by: ["agent-6-strategic-analysis-specialist.md"]
+used_by: [".claude/agents/opportunity-strategist.md"]
 purpose: "Structure phased implementation roadmap with timelines and success metrics"
 ---
 

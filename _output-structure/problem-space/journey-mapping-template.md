@@ -3,7 +3,7 @@ version: "2.0.0"
 last_updated: "2025-10-16"
 author: "Marcelus Fernandes"
 template_type: "journey_mapping"
-used_by: ["agent-3-asis-journey-mapper.md"]
+used_by: [".claude/agents/journey-mapper.md"]
 purpose: "Structure As-Is journey mapping with multi-dimensional pain points by stage"
 ---
 

@@ -1,9 +1,9 @@
-# Workflow Otimizado — Product Discovery Pipeline v3
+# Workflow Otimizado — Product Discovery Pipeline v3 (execução nativa Claude Code)
 
 **Padrão de orquestração:** *prompt chaining* com gates programáticos + aprovação humana entre fases
 (Anthropic — *Building Effective Agents*; verificação por código conforme *Claude Agent SDK*; contexto mínimo conforme *Effective Context Engineering*).
 
-Este documento define **como executar** o pipeline. A definição canônica de passos, contratos e gates está em **`pipeline.yaml`** — nenhum outro arquivo deve redefinir a sequência.
+O pipeline executa **nativamente no Claude Code**: 15 subagentes em `.claude/agents/`, skills de fase em `.claude/skills/` (disparadas pelo humano), hook de guardrail em tempo de escrita e gates por script. A definição canônica de passos, contratos e gates está em **`pipeline.yaml`** — nenhum outro arquivo deve redefinir a sequência.
 
 ---
 
@@ -51,11 +51,19 @@ Cada passo tem **nome por papel** (ex.: `painpoint-synthesizer`), eliminando a a
 2. Coloque as entrevistas em `0-documentation/0b-Interviews/`.
 3. Confira a prontidão: `python3 scripts/validate-gate.py status`
 
-### Executando uma fase
-Para cada passo da fase (ordem definida em `pipeline.yaml`):
-1. Abra o arquivo de agente indicado no campo `agent` do passo e execute-o no seu ambiente (Cursor, Claude Code, API).
-2. O agente lê apenas os `inputs` declarados e o(s) `templates` referenciado(s) — **não cole templates no prompt**; peça ao agente para ler o arquivo.
-3. O agente escreve exatamente os `outputs` declarados.
+### Executando uma fase (Claude Code)
+Cada fase é uma **skill disparada pelo usuário** (`disable-model-invocation: true` — o modelo nunca avança um gate sozinho):
+
+```
+/phase-1-problem      # Fase 1 — Problem Discovery
+/phase-2-solution     # Fase 2 — Solution Development (exige G1 aprovado)
+/phase-3-delivery     # Fase 3 — Delivery Preparation (exige G2 aprovado)
+/pipeline-status      # progresso e próxima ação
+```
+
+A skill lê a fase em `pipeline.yaml` e, passo a passo: lança o subagente do campo `role`, confere o contrato de saída ao retorno (reexecuta apontando a lacuna se quebrado) e nunca avança com contrato quebrado. Cada subagente lê apenas os `inputs` declarados e carrega seu template de `_output-structure/` *just-in-time*.
+
+**Enforcement em tempo de escrita:** o hook `PostToolUse` (`.claude/hooks/guardrail-check.py`) escaneia todo Write/Edit em entregáveis; métricas especulativas bloqueiam com exit 2 e o stderr volta ao agente para autocorreção imediata — o erro é corrigido no momento em que nasce, não só no gate.
 
 ### Fechando uma fase (o gate)
 ```bash
@@ -97,7 +105,7 @@ Ao editar/criar qualquer agente do pipeline:
 
 | Regra | Racional |
 |---|---|
-| Prompt ≤ ~200 linhas: papel, entradas, procedimento em heurísticas, contrato de saída | Evita "context rot"; altitude certa (nem if-else frágil, nem platitude vaga) |
+| Prompt ≤ 120 linhas: papel, entradas, procedimento em heurísticas, contrato de saída | Evita "context rot"; altitude certa (nem if-else frágil, nem platitude vaga) |
 | **Nunca** embutir o outline do template no prompt — referencie o caminho em `_output-structure/` | Elimina a duplicação que causou drift e o dobro de tokens |
 | Guardrails: uma linha apontando para `pipeline.yaml` + scan do gate | Substitui as 4 cópias da tabela de auto-fix |
 | Um objetivo por agente; saída de um passo = entrada do próximo via arquivo | Isolamento de contexto entre fases |
@@ -113,16 +121,18 @@ Legados arquivados (`_archive/legacy/`), orquestrador migrado para 2A/2B, `workf
 **Etapa B — Manifesto + gates ✅ (aplicada neste branch)**
 `pipeline.yaml` (fonte única) + `scripts/validate-gate.py` (`status` / `check` / `approve` / `can-start`), testados ponta-a-ponta, incluindo detecção de violação de guardrail.
 
-**Etapa C — Dieta de prompts (próximo passo recomendado)**
-Reduzir os agentes 6-12 removendo outlines embutidos (referenciar templates por caminho), remover a seção técnica contraditória do Agent 8, unificar idioma. Meta: ~40-50% menos contexto por invocação.
+**Etapa C — Dieta de prompts ✅ (aplicada — migração v3.1)**
+Os 15 agentes foram **destilados** de prompts de 150-850 linhas para ≤120 linhas cada (`.claude/agents/`): papel, entradas, procedimento em heurísticas, contrato de saída referenciando templates por caminho, guardrails em 3 linhas. Metodologia preservada e verificada por rubrica (testes de atomicidade do decomposer, RICE do strategist, ADKAR do communicator etc.); a autocontradição do concept-specialist foi corrigida (agora estritamente conceitual — specs técnicas e user stories pertencem à Fase 3). Idioma unificado em inglês. Redução de ~70-85% de contexto por invocação.
 
-**Etapa D — Execução nativa em Claude Code (opcional)**
-- `.claude/agents/<papel>.md` com frontmatter (`name`, `description` "use quando…", `tools` mínimos — só o publisher de entrega recebe ferramentas Jira/Confluence, `model` barato para extração e forte para síntese).
-- `.claude/skills/fase-1|2|3/SKILL.md` com `disable-model-invocation: true` — o humano dispara cada fase; o modelo não avança sozinho.
-- Hook `PostToolUse` em `Write` chamando `validate-gate.py` (exit 2 bloqueia e devolve o erro ao agente para autocorreção imediata).
-- O espelho `.cursor/rules` é aposentado ou passa a ser gerado a partir de `_agents/` — nunca mais mantido à mão.
+**Etapa D — Execução nativa em Claude Code ✅ (aplicada — migração v3.1)**
+- `.claude/agents/<papel>.md` — 15 subagentes com frontmatter (`name`, `description` "use for…", `tools: Read, Grep, Glob, Write`, `model: sonnet` para extração mecânica / `inherit` para síntese).
+- `.claude/skills/phase-{1,2,3}-*/SKILL.md` com `disable-model-invocation: true` — o humano dispara cada fase; `approve` é sempre do humano. `/pipeline-status` para progresso.
+- Hook `PostToolUse` em `Write|Edit` (`.claude/hooks/guardrail-check.py` via `.claude/settings.json`): exit 2 bloqueia métricas especulativas em entregáveis e devolve o erro ao agente — testado.
+- `CLAUDE.md` com fatos e regras duras (~50 linhas); procedimentos vivem nas skills.
+- **Aposentados** (em `_archive/`): o espelho `.cursor/` inteiro, os agentes numerados de `_agents/` e a prosa de guardrails (`GUARDRAILS-ENFORCEMENT`, `guardrails-police`, `guardrail-validator`, `validation-readme`) — substituídos por CLAUDE.md + hook + gates.
+- **Paralelismo opcional (agent teams):** com `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1`, trabalho independente dentro de uma fase roda como teammates (um `qualitative-researcher` por entrevista; publishers da Fase 3 lado a lado). Teams paralelizam *dentro* da fase, nunca através de gates.
 
-**Etapa E — Avaliador interno (opcional)**
+**Etapa E — Avaliador interno (opcional, próximo passo)**
 Subagente crítico (*evaluator-optimizer*) que confere cada entregável contra a rubrica do template antes de apresentá-lo ao humano — útil porque os critérios de aceite por entregável já existem.
 
 ---
@@ -138,3 +148,6 @@ Subagente crítico (*evaluator-optimizer*) que confere cada entregável contra a
 | Orquestrador executando agente deprecado | Migrado para 2A/2B e apontando para o manifesto |
 | Numeração ambígua (dois "Agent 6") | Nomes por papel no manifesto |
 | Falha no meio = recomeçar do zero | `status` mostra o ponto exato; passos idempotentes |
+| Prompts de 600-850 linhas com templates embutidos | Subagentes ≤120 linhas; templates lidos just-in-time |
+| Violação de guardrail descoberta só no fim (ou nunca) | Hook bloqueia no momento da escrita; gate re-escaneia a fase |
+| Instruções acopladas a um editor específico (Cursor `.mdc`) | Config nativa `.claude/` versionada; degrada graciosamente como markdown puro |

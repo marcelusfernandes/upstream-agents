@@ -3,7 +3,7 @@ version: "1.0.0"
 last_updated: "2025-09-02"
 author: "Marcelus Fernandes"
 template_type: "prioritization_matrix"
-used_by: ["agent-6-strategic-analysis-specialist.md"]
+used_by: [".claude/agents/opportunity-strategist.md"]
 purpose: "Structure opportunity prioritization with impact, feasibility, and risk scoring"
 ---
 

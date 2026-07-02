@@ -3,7 +3,7 @@
 validate-gate.py — Gates de validação verificáveis por máquina para o pipeline.
 
 Lê o manifesto `pipeline.yaml` (fonte única de verdade) e valida os contratos
-de saída de cada passo/fase. Diferente de `_agents/validate-guardrails.py`,
+de saída de cada passo/fase. Diferente de `scripts/validate-guardrails.py`,
 este script NUNCA modifica arquivos: gates são read-only por definição.
 
 Uso:

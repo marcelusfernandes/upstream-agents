@@ -22,8 +22,8 @@ updated: "2026-07-02"
 
 guardrails:
   # Verificação por código (determinística) — nunca apenas prosa.
-  patterns: _agents/validation-patterns.json
-  scanner: _agents/validate-guardrails.py   # auto-fix manual, sob demanda
+  patterns: scripts/validation-patterns.json
+  scanner: scripts/validate-guardrails.py   # auto-fix manual, sob demanda
   gate_scan: scan_only                       # gates NUNCA modificam arquivos
 
 phases:
@@ -36,7 +36,7 @@ phases:
     steps:
       - id: context-setup
         role: product-context-specialist
-        agent: _agents/problem-space/agent-0-product-service-specialist.md
+        agent: .claude/agents/product-context-specialist.md
         inputs:
           - path: 0-documentation/0a-projectdocs/context.md
           - path: "0-documentation/0b-Interviews/*"
@@ -46,7 +46,7 @@ phases:
 
       - id: interview-analysis
         role: qualitative-researcher
-        agent: _agents/problem-space/agent-1-qualitative-research-specialist.md
+        agent: .claude/agents/qualitative-researcher.md
         templates:
           - _output-structure/problem-space/interview-analysis-template.md
         requires: [context-setup]
@@ -56,7 +56,7 @@ phases:
 
       - id: painpoint-granularization
         role: painpoint-decomposer
-        agent: _agents/problem-space/agent-2a-painpoint-granularization-specialist.md
+        agent: .claude/agents/painpoint-decomposer.md
         templates:
           - _output-structure/problem-space/granular-painpoint-template.md
         requires: [interview-analysis]
@@ -65,7 +65,7 @@ phases:
 
       - id: painpoint-clustering
         role: painpoint-synthesizer
-        agent: _agents/problem-space/agent-2b-painpoint-clustering-specialist.md
+        agent: .claude/agents/painpoint-synthesizer.md
         templates:
           - _output-structure/problem-space/pain-point-analysis-template.md
         requires: [painpoint-granularization]
@@ -76,7 +76,7 @@ phases:
 
       - id: asis-journey-mapping
         role: journey-mapper
-        agent: _agents/problem-space/agent-3-asis-journey-mapper.md
+        agent: .claude/agents/journey-mapper.md
         templates:
           - _output-structure/problem-space/journey-mapping-template.md
         requires: [painpoint-clustering]
@@ -86,14 +86,14 @@ phases:
 
       - id: journey-consolidation
         role: journey-consolidator
-        agent: _agents/problem-space/agent-4-journey-consolidation-specialist.md
+        agent: .claude/agents/journey-consolidator.md
         requires: [asis-journey-mapping]
         outputs:
           - path: 1-problem/1c-asis-journey/asis-journey.md
 
       - id: strategic-report
         role: strategic-reporter
-        agent: _agents/problem-space/agent-5-strategic-report-generator.md
+        agent: .claude/agents/strategic-reporter.md
         templates:
           - _output-structure/problem-space/report-template.md
         requires: [journey-consolidation]
@@ -103,7 +103,7 @@ phases:
 
       - id: visual-journey-spec
         role: visual-journey-designer
-        agent: _agents/problem-space/agent-6-visual-journey-designer.md
+        agent: .claude/agents/visual-journey-designer.md
         templates:
           - _output-structure/problem-space/journey-visualization-template.md
         requires: [strategic-report]
@@ -125,7 +125,7 @@ phases:
     steps:
       - id: solution-ideation
         role: opportunity-strategist
-        agent: _agents/solution-space/agent-6-solution-ideation-specialist.md
+        agent: .claude/agents/opportunity-strategist.md
         templates:
           - _output-structure/solution-space/opportunity-identification-template.md
           - _output-structure/solution-space/opportunity-breakdown-template.md
@@ -139,7 +139,7 @@ phases:
 
       - id: experience-design
         role: experience-designer
-        agent: _agents/solution-space/agent-7-experience-design-specialist.md
+        agent: .claude/agents/experience-designer.md
         templates:
           - _output-structure/solution-space/future-journey-template.md
           - _output-structure/solution-space/future-journey-breakdown-template.md
@@ -153,7 +153,7 @@ phases:
 
       - id: solution-concepts
         role: concept-specialist
-        agent: _agents/solution-space/agent-8-solution-concept-specialist.md
+        agent: .claude/agents/concept-specialist.md
         templates:
           - _output-structure/solution-space/solution-concept-template.md
           - _output-structure/solution-space/concept-breakdown-template.md
@@ -167,7 +167,7 @@ phases:
 
       - id: mvp-prioritization
         role: mvp-scoper
-        agent: _agents/solution-space/agent-9-product-prioritization-specialist.md
+        agent: .claude/agents/mvp-scoper.md
         templates:
           - _output-structure/solution-space/mvp-scope-template.md
           - _output-structure/solution-space/feature-prioritization-template.md
@@ -181,7 +181,7 @@ phases:
 
       - id: product-communication
         role: product-communicator
-        agent: _agents/solution-space/agent-10-product-communication-specialist.md
+        agent: .claude/agents/product-communicator.md
         templates:
           - _output-structure/solution-space/product-brief-template.md
           - _output-structure/solution-space/product-roadmap-template.md
@@ -208,7 +208,7 @@ phases:
     steps:
       - id: confluence-structure
         role: confluence-publisher
-        agent: _agents/delivery-space/agent-11-confluence-documentation-specialist.md
+        agent: .claude/agents/confluence-publisher.md
         templates:
           - _output-structure/delivery-space/confluence-page-template.md
           - _output-structure/delivery-space/import-guide-template.md
@@ -218,7 +218,7 @@ phases:
 
       - id: jira-structure
         role: jira-publisher
-        agent: _agents/delivery-space/agent-12-jira-project-setup-specialist.md
+        agent: .claude/agents/jira-publisher.md
         templates:
           - _output-structure/delivery-space/jira-initiative-template.md
           - _output-structure/delivery-space/jira-epic-template.md

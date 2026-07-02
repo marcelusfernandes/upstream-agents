@@ -97,9 +97,9 @@ A lógica do workflow (Problema → Solução → Entrega, com validação human
 - `pipeline.yaml` — fonte única de verdade: fases, passos, contratos de entrada/saída, gates.
 - `scripts/validate-gate.py` — gates verificáveis por máquina (existência/não-vazio dos outputs + scan read-only de guardrails) com aprovação humana registrada em `.gates/` — testado ponta-a-ponta.
 
-**Pendências recomendadas** (não aplicadas nesta entrega — mudam comportamento dos agentes):
-- Dieta de prompts: remover outlines embutidos dos agentes 6-12 e referenciar os templates por caminho (~40% de redução de contexto).
-- Resolver a colisão dos dois "Agent 6" renomeando por papel (o manifesto já usa nomes por papel).
-- Remover a seção técnica contraditória do Agent 8 (`Requirements`/`User Stories`/`Technical Considerations`).
-- Decidir o destino do espelho `.cursor/rules` (gerar a partir de `_agents/` ou eliminar) e unificar o idioma dos prompts.
-- Migração opcional para o modelo nativo Claude Code (`.claude/agents` + skills + hooks) — roadmap na etapa C do `WORKFLOW-OTIMIZADO.md`.
+**Pendências — todas executadas na migração v3.1 (nativa Claude Code):**
+- ✅ Dieta de prompts: os 15 agentes foram destilados para ≤52 linhas cada em `.claude/agents/` (redução de ~70-85% de contexto), com templates referenciados por caminho.
+- ✅ Colisão dos dois "Agent 6" resolvida: nomes por papel (`visual-journey-designer` / `opportunity-strategist`).
+- ✅ Autocontradição do Agent 8 removida: o `concept-specialist` é estritamente conceitual; specs técnicas/user stories pertencem à Fase 3.
+- ✅ Espelho `.cursor/` aposentado (em `_archive/cursor-v2/`); idioma unificado em inglês.
+- ✅ Execução nativa Claude Code: `.claude/agents` + skills de fase + hook de guardrail em tempo de escrita. Detalhes em `WORKFLOW-OTIMIZADO.md`.

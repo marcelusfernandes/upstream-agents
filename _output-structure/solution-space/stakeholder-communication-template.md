@@ -3,7 +3,7 @@ version: "2.0.0"
 last_updated: "2025-10-16"
 author: "Marcelus Fernandes"
 template_type: "stakeholder_communication"
-used_by: ["agent-10-product-communication-specialist.md"]
+used_by: [".claude/agents/product-communicator.md"]
 purpose: "Comprehensive stakeholder communication strategy with audience-specific messaging and ADKAR framework"
 changelog:
   - "v2.0.0 (2025-10-16): Complete restructure from basic (61 lines) to comprehensive (350+ lines). Added ADKAR framework, stakeholder matrix, communication timeline, messaging strategy, and feedback mechanisms"

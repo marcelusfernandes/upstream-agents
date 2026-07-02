@@ -3,7 +3,7 @@ version: "2.4.0"
 last_updated: "2025-10-16"
 author: "Marcelus Fernandes"
 template_type: "directory_structure_model"
-used_by: ["agent-0-product-service-specialist.md", "agent-workflow-orchestrator.mdc"]
+used_by: [".claude/agents/product-context-specialist.md", "agent-workflow-orchestrator.mdc"]
 purpose: "Define AI agent workflow directory structure and output conventions for Cursor AI"
 changelog:
   - "v2.4.0 (2025-10-16): Split Agent 2 into Agent 2A (Granularization) and Agent 2B (Clustering) with 2-phase pain point analysis structure (1b0-granular/ + 1b1-painpoints-breakdown/)"
