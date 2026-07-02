@@ -4,6 +4,8 @@ alwaysApply: false
 ---
 # Agent Workflow Orchestrator
 
+> **Canonical pipeline definition** (steps, inputs/outputs, gates): see `pipeline.yaml` at repo root.
+
 ## Global Guardrails
 **CRITICAL: These rules apply to ALL agents throughout the entire workflow**
 
@@ -61,16 +63,22 @@ When user says any of these phrases, activate this workflow:
 **Focus:** Digital products, services, experience improvements (NOT process automation/AI)
 **Note:** Solution Agents 6-10 are distinct from Problem Space agents (same numbers, different roles)
 
+### Phase 3: Delivery Preparation (Agents 11-12)
+**Data Requirements:** Complete Phase 1 and Phase 2 outputs
+**Guardrails:** Content fidelity - restructure existing outputs, do not invent new content
+**Output:** Confluence documentation structure (`3-delivery/confluence/`) and Jira project structure (`3-delivery/jira/`), ready for import
+**Focus:** Transforming strategic analysis into executable implementation structures
+
 ## Initial User Choice
 For Phase 1, ALWAYS ask the user to choose execution mode:
 
 ```
 🤖 **Agent Workflow Orchestrator - Phase 1**
 
-I'll guide you through the 7-agent problem analysis process (Agents 0-6). Please choose your execution mode:
+I'll guide you through the 8-agent problem analysis process (Agents 0, 1, 2A, 2B, 3-6). Please choose your execution mode:
 
 **Option A: End-to-End Execution**
-- All 7 agents (0-6) run sequentially without interruption
+- All 8 agents (0 → 1 → 2A → 2B → 3 → 4 → 5 → 6) run sequentially without interruption
 - Agents 5 and 6 can run in parallel after Agent 4
 - Faster completion, less control
 - Recommended for: Complete datasets, trusted process
@@ -106,8 +114,8 @@ This phase focuses on conceptual product/service design within qualitative analy
 ```
 🔄 **Running End-to-End Workflow**
 
-I'll execute all 5 agents sequentially:
-Agent 0 → Agent 1 → Agent 2 → Agent 3 → Agent 4 → Agent 5
+I'll execute all 8 agents sequentially:
+Agent 0 → Agent 1 → Agent 2A → Agent 2B → Agent 3 → Agent 4 → Agent 5 → Agent 6
 
 Starting now...
 ```
@@ -200,48 +208,71 @@ Type 'continue' to proceed or 'stop' to pause the workflow.
 
 **Key Findings:**
 - [X] users profiled with context (usage frequency, environment, motivations)
-- [X] pain points extracted WITH STRUCTURE for Agent 2:
+- [X] pain points extracted WITH STRUCTURE for Agents 2A/2B:
   - Each has: quote, context (when/where), frequency, severity, emotional + practical impact
 - [X] emotional journey documented (positive/negative moments, satisfaction)
 - [X] behavioral patterns captured (workarounds, usage patterns)
 - [X] user needs identified (explicit and implicit)
-- [X] potential clusters suggested for Agent 2
+- [X] potential clusters suggested for Agent 2B
 
 **Pain Points Summary:**
 - Total identified: [X pain points]
 - Severity breakdown: Critical: [X], High: [X], Medium: [X], Low: [X]
 - Most common emotions: [list top emotions]
 
-**Ready for Agent 2?** Agent 2 will cluster pain points preserving Agent 1's rich structure.
+**Ready for Agent 2A?** Agent 2A will decompose pain points into atomic, specific problems.
 Type 'continue' to proceed or 'stop' to pause the workflow.
 ```
 
-### Agent 2: Pain Point Analysis Specialist (Structure Preservation)
-**Agent Location:** `.cursor/rules/problem-space/agent-2-painpoint-analysis-specialist.mdc`
-**Agent Activation:** "Execute Agent 2 for pain point clustering with structure preservation from Agent 1"
+### Agent 2A: Pain Point Granularization Specialist (Decomposition)
+**Agent Location:** `.cursor/rules/problem-space/agent-2a-painpoint-granularization-specialist.mdc`
+**Agent Activation:** "Execute Agent 2A for pain point granularization and atomic decomposition"
 **Dependencies:** Agent 1 complete with structured pain points
-**Completion Check:** Pain point clusters created preserving Agent 1 structure, cluster analysis complete
+**Completion Check:** Granular pain point list created (30-50 atomic pain points), atomicity tests applied, TYPE classification complete
 
 **Step-by-Step Completion Message:**
 ```
-✅ **Agent 2 Complete**
+✅ **Agent 2A Complete**
+
+**Deliverables Created:**
+- Granular pain point catalog: `/1-problem/1b-painpoints/1b0-granular/all-painpoints-granular.md`
+
+**Key Findings:**
+- [X] atomic pain points identified (target: 30-50)
+- Atomicity tests applied to every pain point
+- TYPE classification: UX: [X], Ops: [X], Business: [X], Tech: [X]
+- Source traceability preserved from Agent 1 analyses
+
+**Ready for Agent 2B?** Agent 2B will cluster the atomic pain points by relational patterns.
+Type 'continue' to proceed or 'stop' to pause the workflow.
+```
+
+### Agent 2B: Pain Point Clustering Specialist (Pattern Recognition)
+**Agent Location:** `.cursor/rules/problem-space/agent-2b-painpoint-clustering-specialist.mdc`
+**Agent Activation:** "Execute Agent 2B for pain point clustering by relational patterns"
+**Dependencies:** Agent 2A complete, granular pain point list exists
+**Completion Check:** 4-6 relational clusters created, consolidated pain point mapping complete
+
+**Step-by-Step Completion Message:**
+```
+✅ **Agent 2B Complete**
 
 **Deliverables Created:**
 - [X] pain point cluster files in `/1-problem/1b-painpoints/1b1-painpoints-breakdown/`
 - Consolidated mapping: `/1-problem/1b-painpoints/painpoint-mapping.md`
 
 **Key Findings:**
-- [X] pain point clusters identified: [X clusters]
+- [X] pain point clusters identified: [X clusters] (target: 4-6)
 - **Cluster Analysis Completed:**
-  - Frequency patterns: [summary of most/least frequent]
+  - Relational patterns: causal, contextual, and thematic relationships
+  - Cluster types: [UX-led/Ops-led/Business-led/Tech-led/Cross breakdown]
   - Severity distribution per cluster: [breakdown]
-  - Experience impact summary: [emotional + practical patterns]
 - **Priority Clusters:** [list top 3 with severity/frequency/impact]
 - **Process stages most affected:** [list stages with pain point counts]
 
 **Structure Quality:**
-- ✅ Agent 1's pain point structure PRESERVED (quote, context, frequency, severity, impact)
-- ✅ Experience impact synthesized (emotional + practical)
+- ✅ Agent 2A's atomic pain points PRESERVED (no re-consolidation)
+- ✅ Clusters formed by RELATIONSHIPS, not by type
 - ✅ Priority matrix created using severity + frequency + impact
 
 **Ready for Agent 3?** Agent 3 will map As-Is journeys using pain point context.
@@ -251,7 +282,7 @@ Type 'continue' to proceed or 'stop' to pause the workflow.
 ### Agent 3: As-Is Journey Mapper
 **Agent Location:** `.cursor/rules/problem-space/agent-3-asis-journey-mapper.mdc`
 **Agent Activation:** "Execute Agent 3 for current state journey mapping and process documentation"
-**Dependencies:** Agent 2 complete, pain point analyses exist
+**Dependencies:** Agent 2B complete, pain point clusters and mapping exist
 **Completion Check:** Journey files created for all sources
 
 **Step-by-Step Completion Message:**
@@ -330,7 +361,7 @@ Type 'continue' to proceed or 'stop' to pause the workflow.
 
 **Phase 1 Summary:**
 - [X] Interviews analyzed (Agent 1)
-- [X] Pain points clustered and prioritized (Agent 2)
+- [X] Pain points granularized and clustered (Agents 2A & 2B)
 - [X] As-Is journey consolidated (Agent 4)
 - [X] Strategic reports generated (Agent 5)
 - [X] Figma Make specifications created (Agent 6)
@@ -503,7 +534,7 @@ Type 'continue' to proceed or 'stop' to pause the workflow.
 - ✅ Audience-specific messaging strategy
 - ✅ Communication channels mapped
 - ✅ Feedback mechanisms with response timelines
-- ✅ Foundation ready for future Agent 11 (Change Management) if needed
+- ✅ Foundation ready for Phase 3 (Delivery Agents 11-12)
 
 **Next Steps:**
 Solution ideation is complete. You can now:
@@ -513,9 +544,39 @@ Solution ideation is complete. You can now:
 4. Use materials for stakeholder alignment and buy-in
 5. Begin detailed product specification and design (next phase)
 6. Execute MVP development based on prioritization
-7. **Optional Future:** Expand to Agent 11 (Change Management) for adoption optimization
+7. Proceed to Phase 3 (Delivery Agents 11-12) to create Confluence and Jira structures
 
 **Quality Assurance:** All Phase 2 outputs focus on product/experience concepts with proper source attribution, conservative estimates, and McKinsey/Accenture-grade stakeholder communications.
+```
+
+## Phase 3: Delivery Preparation Agents (Agents 11-12)
+**Note:** Phase 3 transforms Phase 1 and Phase 2 outputs into import-ready structures. Content fidelity is mandatory - restructure, do not invent.
+
+### Agent 11: Confluence Documentation Specialist
+**Agent Location:** `.cursor/rules/delivery-space/agent-11-confluence-documentation-specialist.mdc`
+**Agent Activation:** "Execute Agent 11 for Confluence documentation structuring"
+**Dependencies:** Phase 2 complete, solution outputs exist
+**Completion Check:** Complete Confluence page hierarchy created in `3-delivery/confluence/` with navigation and import guide
+
+### Agent 12: Jira Project Setup Specialist
+**Agent Location:** `.cursor/rules/delivery-space/agent-12-jira-project-setup-specialist.mdc`
+**Agent Activation:** "Execute Agent 12 for Jira project structure creation"
+**Dependencies:** Agent 11 complete (or Phase 2 complete for standalone execution)
+**Completion Check:** Initiative, Epics, and Stories created in `3-delivery/jira/` with relationships, prioritization, and import guide
+
+**Phase 3 Completion Message:**
+```
+🎉 **Phase 3 Complete - Delivery Preparation Finished (Agents 11-12)**
+
+**Final Phase 3 Deliverables:**
+- Confluence documentation structure: `/3-delivery/confluence/` (Agent 11)
+- Jira project structure: `/3-delivery/jira/` (Agent 12)
+- Import guides for both platforms
+
+**Next Steps:**
+1. Import Confluence structure following its import guide
+2. Import Jira Initiative/Epics/Stories following its import guide
+3. Begin implementation with full strategic traceability
 ```
 
 ## Error Handling

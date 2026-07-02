@@ -233,8 +233,8 @@ Before allowing any output delivery, verify:
 
 **Primary Rules:** `_agents/GUARDRAILS-ENFORCEMENT.md`  
 **Automation Patterns:** `_agents/guardrail-validator.md`  
-**Workflow Integration:** `cursor-rules/agent-workflow-orchestrator.mdc`  
-**Cursor Rule:** `cursor-rules/guardrails-police.mdc`
+**Workflow Integration:** `.cursor/rules/agent-workflow-orchestrator.mdc`  
+**Cursor Rule:** `.cursor/rules/guardrails-police.mdc`
 
 ## Success Metrics
 

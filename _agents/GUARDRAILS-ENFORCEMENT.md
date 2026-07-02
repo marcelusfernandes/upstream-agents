@@ -59,20 +59,20 @@
 
 ## 📋 SOLUTION SPACE SPECIFIC GUIDANCE
 
-### Agent 6 (Strategic Analysis):
+### Agent 6 (Solution Ideation Specialist):
 - Focus on qualitative opportunity assessment
 - Use Impact×Feasibility-Risk scoring (transparent methodology)
 - Avoid financial quantification unless directly derived from problem analysis
 
-### Agent 7 (Process Optimization):  
-- Emphasize process improvement potential
-- Use efficiency language rather than cost language
-- Base automation potential on technical assessment, not financial speculation
+### Agent 7 (Experience Design Specialist):
+- Emphasize experience improvement potential
+- Use experience improvement language rather than cost/efficiency language
+- Focus on emotional and behavioral outcomes, not financial speculation
 
-### Agent 8 (Communication):
-- Maintain strategic value narrative
-- Use investment/benefit language appropriate for audience
-- Focus on competitive advantage and capability development over financial returns
+### Agent 8 (Solution Concept Specialist):
+- Conceptual proposals, not technical specs
+- High-level feasibility assessment only
+- No detailed cost estimates or financial quantification
 
 ## 🚨 ENFORCEMENT PROTOCOL
 

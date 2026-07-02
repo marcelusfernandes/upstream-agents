@@ -18,8 +18,7 @@ The automated guardrail validation system prevents data integrity violations by:
 - `conservative-estimation-guide.md` - Language guidelines
 
 ### Integration Updates
-- `.cursorpkg/instructions/agent-workflow-orchestrator.md` - Added post-execution validation step
-- `_agents/improvements.md` - Marked validation system as implemented
+- `.cursor/rules/agent-workflow-orchestrator.mdc` - Added post-execution validation step
 
 ## Orchestrator Integration
 
@@ -95,7 +94,7 @@ else:
 ### Manual Validation (Testing)
 ```bash
 # Validate specific directory
-python _agents/validate-guardrails.py "2-solution/2a-ideation/"
+python _agents/validate-guardrails.py "2-solution/2a-opportunities/"
 
 # Validate all solution space files  
 python _agents/validate-guardrails.py "2-solution/"

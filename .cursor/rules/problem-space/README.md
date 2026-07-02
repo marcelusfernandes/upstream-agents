@@ -2,13 +2,19 @@
 
 ## Overview
 
-The Problem Space consists of 7 specialized agents (Agents 0-6) that systematically analyze customer research data to identify and document core problems, pain points, and current-state processes. This phase transforms raw interview data into strategic problem statements, actionable insights, and AI-ready visual journey maps.
+The Problem Space consists of 8 specialized agents (Agents 0, 1, 2A, 2B, 3-6) that systematically analyze customer research data to identify and document core problems, pain points, and current-state processes. This phase transforms raw interview data into strategic problem statements, actionable insights, and AI-ready visual journey maps.
+
+## Agent Sequence
+
+```
+Agent 0 → Agent 1 → Agent 2A → Agent 2B → Agent 3 → Agent 4 → Agent 5 → Agent 6
+```
 
 ## Agent Sequence & Responsibilities
 
 ### 🔍 Agent 0: Product & Service Design Specialist
-**Input:** Project documentation, context files  
-**Output:** Broad context analysis, project scaffolding  
+**Input:** `/0-documentation/0a-projectdocs/` context files (e.g., `context.md`)  
+**Output:** `/0-documentation/broad-context.md`, project scaffolding  
 **Purpose:** Initial project understanding and structure setup
 
 **Key Tasks:**
@@ -17,7 +23,7 @@ The Problem Space consists of 7 specialized agents (Agents 0-6) that systematica
 - Scaffold `/1-problem/` directory structure
 - Hand off to Agent 1 with status summary
 
-### 📋 Agent 1: Qualitative Research Specialist  
+### 📋 Agent 1: Qualitative Research Specialist
 **Input:** Interview files from `/0-documentation/0b-Interviews/`  
 **Output:** Structured interview analyses  
 **Purpose:** Extract insights from customer interviews
@@ -28,19 +34,31 @@ The Problem Space consists of 7 specialized agents (Agents 0-6) that systematica
 - Extract people, processes, pain points, needs, opportunities
 - Use interview-analysis-template.md structure
 
-### 🎯 Agent 2: Pain Point Analysis Specialist
+### ⚡ Agent 2A: Pain Point Granularization Specialist
 **Input:** Interview analyses from Agent 1  
-**Output:** Clustered pain point breakdowns  
-**Purpose:** Identify and categorize pain points by theme
+**Output:** `/1-problem/1b-painpoints/1b0-granular/all-painpoints-granular.md`  
+**Purpose:** DECOMPOSE pain points into atomic, specific problems (30-50 pain points)
 
 **Key Tasks:**
-- Cluster pain points by theme/area/process
-- Create breakdown files per cluster in `/1b1-painpoints-breakdown/`
-- Map pain points to process stages
+- Split each pain point by scenario, root cause, and process stage
+- Apply atomicity tests to ensure maximum granularity
+- Classify by TYPE (UX/Ops/Business/Tech)
+- **Philosophy:** Divergent analysis - break everything into smallest parts
+
+### ⚡ Agent 2B: Pain Point Clustering Specialist
+**Input:** Agent 2A granular pain point list  
+**Output:** Cluster files in `/1b1-painpoints-breakdown/` + consolidated `painpoint-mapping.md`  
+**Purpose:** GROUP atomic pain points by relational patterns (4-6 clusters)
+
+**Key Tasks:**
+- Identify causal, contextual, and thematic relationships
+- Form 4-6 meaningful clusters (6-10 pain points each)
+- Classify cluster type (UX-led/Ops-led/Business-led/Tech-led/Cross)
 - Generate consolidated pain point mapping
+- **Philosophy:** Convergent analysis - find meaningful patterns
 
 ### 🗺️ Agent 3: As-Is Journey Mapper
-**Input:** Interview analyses + pain point breakdowns  
+**Input:** Interview analyses + pain point clusters (Agent 2B)  
 **Output:** Individual As-Is journey maps  
 **Purpose:** Document current-state processes and workflows
 
@@ -87,12 +105,13 @@ The Problem Space consists of 7 specialized agents (Agents 0-6) that systematica
 ```mermaid
 graph TD
     A[Agent 0: Context & Setup] --> B[Agent 1: Interview Analysis]
-    B --> C[Agent 2: Pain Point Clustering]
-    B --> D[Agent 3: Journey Mapping]
-    C --> D
-    D --> E[Agent 4: Journey Consolidation]
-    E --> F[Agent 5: Strategic Reports]
-    E --> G[Agent 6: Visual Journey Designer]
+    B --> C[Agent 2A: Pain Point Granularization]
+    C --> D[Agent 2B: Pain Point Clustering]
+    B --> E[Agent 3: Journey Mapping]
+    D --> E
+    E --> F[Agent 4: Journey Consolidation]
+    F --> G[Agent 5: Strategic Reports]
+    F --> H[Agent 6: Visual Journey Designer]
 ```
 
 **Note:** Agents 5 and 6 can run in parallel after Agent 4 completion.
@@ -106,11 +125,13 @@ graph TD
 │   ├── (name2)-analysis.md
 │   └── ...
 ├── 1b-painpoints/
+│   ├── 1b0-granular/
+│   │   └── all-painpoints-granular.md   (Agent 2A: 30-50 atomic pain points)
 │   ├── 1b1-painpoints-breakdown/
-│   │   ├── (cluster1).md
+│   │   ├── (cluster1).md                (Agent 2B)
 │   │   ├── (cluster2).md
 │   │   └── ...
-│   └── painpoint-mapping.md
+│   └── painpoint-mapping.md             (Agent 2B final mapping)
 ├── 1c-asis-journey/
 │   ├── 1c2-asis-breakdown/
 │   │   ├── (source1)-journey.md
@@ -123,11 +144,19 @@ graph TD
     └── journey-output.md
 ```
 
+## Pain Point Analysis: 2-Phase Process
+
+**Why the Agent 2 split?** The original Agent 2 had conflicting goals — decompose (divergent) and cluster (convergent) — which produced over-consolidated results. The split gives each phase a clear, focused instruction set:
+
+- **Agent 2A (Granularization):** Pure decomposition. Target 30-50 atomic pain points. Default to SPLIT when uncertain; never create umbrella pain points.
+- **Agent 2B (Clustering):** Pure pattern recognition. Cluster by RELATIONSHIPS (causal, contextual, thematic), not by type. Target 4-6 meaningful clusters.
+
 ## Templates & Dependencies
 
 ### Required Templates
 - `_output-structure/problem-space/interview-analysis-template.md`
-- `_output-structure/problem-space/pain-point-analysis-template.md`
+- `_output-structure/problem-space/granular-painpoint-template.md` (Agent 2A)
+- `_output-structure/problem-space/pain-point-analysis-template.md` (Agent 2B)
 - `_output-structure/problem-space/journey-mapping-template.md`
 - `_output-structure/problem-space/report-template.md`
 
@@ -150,7 +179,7 @@ Ensure the following exist before starting:
 ### 3. Trigger Commands
 ```
 start workflow
-begin analysis  
+begin analysis
 run agents
 start process
 execute workflow
@@ -172,7 +201,8 @@ execute workflow
 
 ### Deliverable Standards
 - **Interview Analyses:** Complete coverage of all interview files
-- **Pain Point Clusters:** Logical grouping with impact assessment
+- **Granular Pain Points:** 30-50 atomic, specific problems with type classification
+- **Pain Point Clusters:** 4-6 relational clusters with impact assessment
 - **Journey Maps:** Stage-by-stage breakdown with touchpoints
 - **Strategic Reports:** Executive-ready with actionable recommendations
 
@@ -180,7 +210,7 @@ execute workflow
 
 ### Completeness
 - [ ] All interview files processed into structured analyses
-- [ ] Pain points clustered and mapped to process stages
+- [ ] Pain points decomposed into atomic items (Agent 2A) and clustered (Agent 2B)
 - [ ] Current-state journey documented comprehensively
 - [ ] Strategic reports generated with clear recommendations
 
@@ -228,9 +258,10 @@ execute workflow
 
 ## Version History
 
-- **v1.1.0** - Current stable version with template dependencies
+- **v2.0.0** - Split Agent 2 into Agent 2A (Granularization) + Agent 2B (Clustering); added `1b0-granular/` structure
+- **v1.1.0** - Stable version with template dependencies
 - **v1.0.0** - Initial agent specification and workflow design
 
 ---
 
-**Next Phase:** After Problem Space completion, proceed to [Solution Space Agents](../solution-space/) (Agents 6-8) for opportunity identification and strategic solution design.
+**Next Phase:** After Problem Space completion, proceed to [Solution Space Agents](../solution-space/) (Agents 6-10) for opportunity identification, experience design, solution concepts, prioritization, and product communications.

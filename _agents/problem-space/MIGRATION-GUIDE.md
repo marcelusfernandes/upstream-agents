@@ -62,7 +62,7 @@ This created:
 **AFTER:**
 - `agent-2a-painpoint-granularization-specialist.md` (decomposition)
 - `agent-2b-painpoint-clustering-specialist.md` (clustering)
-- `agent-2-painpoint-analysis-specialist.md.backup` (archived)
+- `agent-2-painpoint-analysis-specialist.md.backup` (archived in `/_archive/legacy/`)
 
 ### Templates
 

@@ -65,7 +65,7 @@ The project follows a systematic problem → solution → delivery progression w
 │   └── validation-readme.md    # Validation system docs
 └── _output-structure/       # Templates and formatting guides
     ├── problem-space/       # Problem analysis templates (7 templates)
-    ├── solution-space/      # Solution development templates (19 templates)
+    ├── solution-space/      # Solution development templates (18 templates + 2 guides)
     ├── delivery-space/      # Delivery preparation templates (5 templates)
     └── workflow-rules.md    # Process and progression rules
 ```
@@ -84,7 +84,8 @@ The project follows a systematic problem → solution → delivery progression w
 **Agent 0: Product & Service Specialist**
 - Creates project structure and broad context
 - Establishes business objectives and scope
-- **Output:** `0-documentation/0a-projectdocs/context.md`, directory scaffolding
+- **Input:** `0-documentation/0a-projectdocs/context.md` (business context and objectives)
+- **Output:** `0-documentation/broad-context.md` (consumed by all downstream agents), directory scaffolding
 
 **Agent 1: Qualitative Research Specialist** 
 - Analyzes individual interview files
@@ -224,7 +225,7 @@ The project follows a systematic problem → solution → delivery progression w
 ### Getting Started
 1. **Prepare Source Materials:**
    - Place interview files in `0-documentation/0b-Interviews/`
-   - Create/update `0-documentation/0a-projectdocs/context.md` with business objectives
+   - Create/update `0-documentation/0a-projectdocs/context.md` with business objectives (this is Agent 0's input; Agent 0 normalizes it into `0-documentation/broad-context.md`, which all downstream agents consume)
    - Ensure interviews contain: process steps, pain points, needs, opportunities
 
 ### Phase 1: Problem Analysis (Agents 0-6)
@@ -300,7 +301,7 @@ The project follows a systematic problem → solution → delivery progression w
 - **Report Template** - Strategic reports and executive summaries (Agent 5)
 - **Model Structure** - Core directory structure reference
 
-### Solution Space Templates (19 templates)
+### Solution Space Templates (18 templates + 2 guides)
 - **Opportunity Identification Template** - Strategic opportunity analysis (Agent 6)
 - **Opportunity Breakdown Template** - Individual opportunity details (Agent 6)
 - **Prioritization Matrix Template** - Impact vs feasibility scoring (Agent 6)
@@ -308,7 +309,7 @@ The project follows a systematic problem → solution → delivery progression w
 - **Future Journey Template** - To-Be journey design (Agent 7)
 - **Future Journey Breakdown Template** - Individual stage details (Agent 7)
 - **Experience Improvements Template** - Experience transformation mapping (Agent 7)
-- **Experience Evolution Template** - As-Is to To-Be transformation (Agent 7)
+- **Experience Evolution Template** - As-Is to To-Be transformation (Agent 10)
 - **Solution Concept Template** - Concept documentation (Agent 8)
 - **Concept Breakdown Template** - Individual concept details (Agent 8)
 - **Feasibility Assessment Template** - Feasibility analysis (Agent 8)
@@ -366,6 +367,23 @@ Phase 3: Agents 11 → 12
 
 ---
 
+## Pipeline Manifest & Validation Gates (v3)
+
+The canonical pipeline definition — phase order, per-step agents, input/output contracts, and gates — lives in **`pipeline.yaml`** at the repo root. All other docs (including this README and the orchestrator) reference it; none redefine it.
+
+Machine-verifiable gates are run with `scripts/validate-gate.py`:
+
+```bash
+python3 scripts/validate-gate.py status        # pipeline progress (✅ done / ▶️ ready / ⛔ blocked)
+python3 scripts/validate-gate.py check 1       # read-only gate checks for a phase
+python3 scripts/validate-gate.py approve 1     # record human approval (refused if checks fail)
+python3 scripts/validate-gate.py can-start 2   # verify the previous gate was approved
+```
+
+See **`WORKFLOW-OTIMIZADO.md`** for the full execution guide and **`AVALIACAO.md`** for the system evaluation that motivated this design.
+
+---
+
 ## Quality Control & Validation
 
 ### Automated Quality Assurance
@@ -388,7 +406,6 @@ The system includes comprehensive quality control mechanisms to ensure analysis 
 - **Template Compliance:** Consistent formatting and structure adherence
 
 ### Continuous Improvement
-- **Improvement Tracking:** `_agents/improvements.md` - System enhancement documentation
 - **Template Refinement:** Regular updates based on usage patterns
 - **Agent Optimization:** Enhanced instructions based on output quality
 - **Process Evolution:** Adaptation for new research methodologies

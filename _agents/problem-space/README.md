@@ -192,7 +192,7 @@ From 40 atomic pain points → 5 clusters:
 
 - Agent 2A: `agent-2a-painpoint-granularization-specialist.md`
 - Agent 2B: `agent-2b-painpoint-clustering-specialist.md`
-- Agent 2 (deprecated): `agent-2-painpoint-analysis-specialist.md.backup`
+- Agent 2 (deprecated): `/_archive/legacy/agent-2-painpoint-analysis-specialist.md.backup`
 - Template (granular): `/_output-structure/problem-space/granular-painpoint-template.md`
 - Template (cluster): `/_output-structure/problem-space/pain-point-analysis-template.md`
 - Workflow: `/_output-structure/workflow-rules.md`

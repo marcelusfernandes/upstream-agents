@@ -3,7 +3,7 @@ version: "1.0.0"
 last_updated: "2025-09-02"
 author: "Marcelus Fernandes"
 template_type: "executive_presentation"
-used_by: ["agent-8-communication-specialist.md"]
+used_by: ["agent-10-product-communication-specialist.md"]
 purpose: "Structure executive presentations with strategic narrative and ROI story"
 ---
 
