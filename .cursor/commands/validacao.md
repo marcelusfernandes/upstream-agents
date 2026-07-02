@@ -1,1 +1,0 @@
-Execute as validações de `_agents/guardrails-validator.md` onde o usuário definir. Se deixar em branco pergunte se é em alguma pasta específica ou em todo o projeto

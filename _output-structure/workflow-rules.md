@@ -1,11 +1,12 @@
 ---
-version: "2.2.0"
-last_updated: "2025-10-16"
+version: "2.3.0"
+last_updated: "2026-07-02"
 author: "Marcelus Fernandes"
 template_type: "workflow_rules"
 used_by: ["all agents"]
 purpose: "Define workflow progression rules and file operation guidelines"
 changelog:
+  - "v2.3.0 (2026-07-02): Replaced obsolete 3-development/ phase with actual 3-delivery/ structure (confluence/ + jira/, Agents 11-12); added Phase 3 to agent sequence and phase focus areas"
   - "v2.2.0 (2025-10-16): Split Agent 2 into Agent 2A (Granularization) and Agent 2B (Clustering) with 2-phase pain point analysis structure"
   - "v2.1.0 (2025-10-16): Added note about critical template v2.0.0 updates (opportunity-identification and stakeholder-communication)"
   - "v2.0.0 (2025-10-15): Updated Solution Space structure for product/experience focus, updated sub-phase descriptions, added breakdown folder guidance"
@@ -21,7 +22,7 @@ changelog:
 
 ## 2. SEQUENTIAL PROGRESSION
 ### Main Phases
-- Problem (1) → Solution (2) → Development (3)
+- Problem (1) → Solution (2) → Delivery (3)
 - Never skip steps in the numerical sequence
 - Higher numbers can reference lower, but not vice-versa
 
@@ -47,11 +48,9 @@ Each main phase follows an alphabetical progression (a→b→c→d→e) represen
 - 2d-roadmap/: MVP scope, feature prioritization, and validation plan (with 2d1-mvp/ and 2d2-stage2/)
 - 2e-solution-output/: Product communications and executive materials (with stakeholder-communications/)
 
-#### 3-development/
-- 3a-planning/: Development planning
-- 3b-technical-specs/: Technical specifications
-- 3c-implementation/: Implementation details
-- 3d-development-output/: Development documentation
+#### 3-delivery/
+- confluence/: Confluence-ready documentation structure (Agent 11 output)
+- jira/: Jira project structure — Initiative, Epics, Stories + import guide (Agent 12 output)
 
 ## 3. OUTPUT HANDLING
 - Each major phase has an output folder (ends with `-output`)
@@ -97,7 +96,7 @@ Each main phase follows an alphabetical progression (a→b→c→d→e) represen
 - Templates guide document structure
 - Follow folder letter sequence (a→b→c→d→e)
 - Respect phase boundaries (0→1→2→3)
-- **Agent sequence:** Phase 1 (Agents 0-6) → Phase 2 (Solution Agents 6-10)
+- **Agent sequence:** Phase 1 (Agents 0-6) → Phase 2 (Solution Agents 6-10) → Phase 3 (Delivery Agents 11 → 12)
 - **Breakdown folders:** Create when multiple items need individual analysis
 - **Naming consistency:** Use hyphen-case for all files and folders
 
@@ -136,6 +135,14 @@ Each main phase follows an alphabetical progression (a→b→c→d→e) represen
 - **Template Versions:** Critical templates updated to v2.0.0 (2025-10-16):
   - `opportunity-identification-template.md` v2.0.0 (product thinking, user value propositions)
   - `stakeholder-communication-template.md` v2.0.0 (ADKAR framework, comprehensive)
+
+### Phase 3: Delivery Space (Implementation Preparation)
+- **Purpose:** Transform strategic analysis into import-ready implementation structures
+- **Agents:** Delivery Agents 11-12
+  - Agent 11: Confluence Documentation Specialist
+  - Agent 12: Jira Project Setup Specialist
+- **Focus:** Confluence page hierarchy, Jira Initiative/Epics/Stories, import guides
+- **Key Outputs:** `3-delivery/confluence/` documentation structure, `3-delivery/jira/` project structure with import guide
 
 ## 12. SPECIAL FOLDER STRUCTURES
 

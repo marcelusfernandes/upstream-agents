@@ -3,7 +3,7 @@ version: "2.1.0"
 last_updated: "2025-10-16"
 author: "Marcelus Fernandes"
 template_type: "interview_analysis"
-used_by: ["agent-1-qualitative-research-specialist.md"]
+used_by: [".claude/agents/qualitative-researcher.md"]
 purpose: "Structure user interview analysis with experience insights, pain points, and behavioral patterns"
 changelog:
   - "v2.1.0 (2025-10-16): Removed TYPE classification from pain points - Agent 2 will classify by type (UX/Ops/Business/Tech)"

@@ -3,7 +3,7 @@ version: "2.0.0"
 last_updated: "2025-10-16"
 author: "Marcelus Fernandes"
 template_type: "opportunity_identification"
-used_by: ["agent-6-solution-ideation-specialist.md"]
+used_by: [".claude/agents/opportunity-strategist.md"]
 purpose: "Transform pain clusters into user-centric product/service opportunities"
 changelog:
   - "v2.0.0 (2025-10-16): Complete restructure from automation-focused to product thinking. Added user value propositions, hypothesis-driven approach, journey stage mapping, and validation strategy"

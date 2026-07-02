@@ -3,7 +3,7 @@ version: "2.0.0"
 last_updated: "2025-10-16"
 author: "Marcelus Fernandes"
 template_type: "strategic_report"
-used_by: ["agent-5-strategic-report-generator.md"]
+used_by: [".claude/agents/strategic-reporter.md"]
 purpose: "Structure multi-dimensional strategic reports (pain, problem, journey)"
 ---
 

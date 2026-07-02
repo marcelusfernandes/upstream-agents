@@ -1,0 +1,235 @@
+# =============================================================================
+# pipeline.yaml — FONTE ÚNICA DE VERDADE do workflow de Product Discovery
+# =============================================================================
+# Este manifesto define a ordem das fases, os agentes de cada passo, seus
+# contratos de entrada/saída (arquivos) e os gates de validação entre fases.
+#
+# Regras:
+#   - Nenhum outro arquivo deve redefinir a sequência do pipeline. READMEs e
+#     orquestradores devem REFERENCIAR este manifesto, nunca duplicá-lo.
+#   - Um passo só pode executar quando todos os `inputs` existem.
+#   - Uma fase só é concluída quando seu gate passa:
+#       python3 scripts/validate-gate.py check <fase>
+#   - A fase seguinte só pode iniciar após aprovação humana registrada:
+#       python3 scripts/validate-gate.py approve <fase>
+#
+# Padrão de orquestração: prompt chaining com gates programáticos
+# (Anthropic, "Building Effective Agents") + aprovação humana entre fases.
+# =============================================================================
+
+version: "3.0.0"
+updated: "2026-07-02"
+
+guardrails:
+  # Verificação por código (determinística) — nunca apenas prosa.
+  patterns: scripts/validation-patterns.json
+  scanner: scripts/validate-guardrails.py   # auto-fix manual, sob demanda
+  gate_scan: scan_only                       # gates NUNCA modificam arquivos
+
+phases:
+  # ---------------------------------------------------------------------------
+  # FASE 1 — Descoberta do Problema
+  # ---------------------------------------------------------------------------
+  - id: "1"
+    name: "Problem Discovery"
+    output_root: 1-problem
+    steps:
+      - id: context-setup
+        role: product-context-specialist
+        agent: .claude/agents/product-context-specialist.md
+        inputs:
+          - path: 0-documentation/0a-projectdocs/context.md
+          - path: "0-documentation/0b-Interviews/*"
+            min_files: 1
+        outputs:
+          - path: 0-documentation/broad-context.md
+
+      - id: interview-analysis
+        role: qualitative-researcher
+        agent: .claude/agents/qualitative-researcher.md
+        templates:
+          - _output-structure/problem-space/interview-analysis-template.md
+        requires: [context-setup]
+        outputs:
+          - path: "1-problem/1a-interview-analysis/*.md"
+            min_files: 1
+
+      - id: painpoint-granularization
+        role: painpoint-decomposer
+        agent: .claude/agents/painpoint-decomposer.md
+        templates:
+          - _output-structure/problem-space/granular-painpoint-template.md
+        requires: [interview-analysis]
+        outputs:
+          - path: 1-problem/1b-painpoints/1b0-granular/all-painpoints-granular.md
+
+      - id: painpoint-clustering
+        role: painpoint-synthesizer
+        agent: .claude/agents/painpoint-synthesizer.md
+        templates:
+          - _output-structure/problem-space/pain-point-analysis-template.md
+        requires: [painpoint-granularization]
+        outputs:
+          - path: "1-problem/1b-painpoints/1b1-painpoints-breakdown/*.md"
+            min_files: 4   # 4–6 clusters temáticos
+          - path: 1-problem/1b-painpoints/painpoint-mapping.md
+
+      - id: asis-journey-mapping
+        role: journey-mapper
+        agent: .claude/agents/journey-mapper.md
+        templates:
+          - _output-structure/problem-space/journey-mapping-template.md
+        requires: [painpoint-clustering]
+        outputs:
+          - path: "1-problem/1c-asis-journey/1c2-asis-breakdown/*.md"
+            min_files: 1
+
+      - id: journey-consolidation
+        role: journey-consolidator
+        agent: .claude/agents/journey-consolidator.md
+        requires: [asis-journey-mapping]
+        outputs:
+          - path: 1-problem/1c-asis-journey/asis-journey.md
+
+      - id: strategic-report
+        role: strategic-reporter
+        agent: .claude/agents/strategic-reporter.md
+        templates:
+          - _output-structure/problem-space/report-template.md
+        requires: [journey-consolidation]
+        outputs:
+          - path: 1-problem/1d-problem-output/pain-report.md
+          - path: 1-problem/1d-problem-output/problem-report.md
+
+      - id: visual-journey-spec
+        role: visual-journey-designer
+        agent: .claude/agents/visual-journey-designer.md
+        templates:
+          - _output-structure/problem-space/journey-visualization-template.md
+        requires: [strategic-report]
+        outputs:
+          - path: 1-problem/1d-problem-output/journey-output.md
+    gate:
+      id: G1
+      checks: [outputs_exist, guardrails_scan]
+      scan_dirs: [1-problem]
+      human_approval: true
+
+  # ---------------------------------------------------------------------------
+  # FASE 2 — Desenvolvimento da Solução
+  # ---------------------------------------------------------------------------
+  - id: "2"
+    name: "Solution Development"
+    output_root: 2-solution
+    requires_gate: G1
+    steps:
+      - id: solution-ideation
+        role: opportunity-strategist
+        agent: .claude/agents/opportunity-strategist.md
+        templates:
+          - _output-structure/solution-space/opportunity-identification-template.md
+          - _output-structure/solution-space/opportunity-breakdown-template.md
+          - _output-structure/solution-space/prioritization-matrix-template.md
+          - _output-structure/solution-space/strategic-roadmap-template.md
+        outputs:
+          - path: "2-solution/2a-opportunities/*.md"
+            min_files: 1
+          - path: "2-solution/2a-opportunities/2a1-opportunities-breakdown/*.md"
+            min_files: 1
+
+      - id: experience-design
+        role: experience-designer
+        agent: .claude/agents/experience-designer.md
+        templates:
+          - _output-structure/solution-space/future-journey-template.md
+          - _output-structure/solution-space/future-journey-breakdown-template.md
+          - _output-structure/solution-space/experience-improvements-template.md
+        requires: [solution-ideation]
+        outputs:
+          - path: "2-solution/2b-tobe_journey/*.md"
+            min_files: 1
+          - path: "2-solution/2b-tobe_journey/2b1-journey-breakdown/*.md"
+            min_files: 1
+
+      - id: solution-concepts
+        role: concept-specialist
+        agent: .claude/agents/concept-specialist.md
+        templates:
+          - _output-structure/solution-space/solution-concept-template.md
+          - _output-structure/solution-space/concept-breakdown-template.md
+          - _output-structure/solution-space/feasibility-assessment-template.md
+        requires: [experience-design]
+        outputs:
+          - path: "2-solution/2c-priotization/*.md"
+            min_files: 1
+          - path: "2-solution/2c-priotization/2c1-concept-breakdown/*.md"
+            min_files: 1
+
+      - id: mvp-prioritization
+        role: mvp-scoper
+        agent: .claude/agents/mvp-scoper.md
+        templates:
+          - _output-structure/solution-space/mvp-scope-template.md
+          - _output-structure/solution-space/feature-prioritization-template.md
+          - _output-structure/solution-space/validation-plan-template.md
+        requires: [solution-concepts]
+        outputs:
+          - path: "2-solution/2d-roadmap/*.md"
+            min_files: 1
+          - path: "2-solution/2d-roadmap/2d1-mvp/*.md"
+            min_files: 1
+
+      - id: product-communication
+        role: product-communicator
+        agent: .claude/agents/product-communicator.md
+        templates:
+          - _output-structure/solution-space/product-brief-template.md
+          - _output-structure/solution-space/product-roadmap-template.md
+          - _output-structure/solution-space/experience-evolution-template.md
+          - _output-structure/solution-space/executive-presentation-template.md
+          - _output-structure/solution-space/stakeholder-communication-template.md
+        requires: [mvp-prioritization]
+        outputs:
+          - path: "2-solution/2e-solution-output/*.md"
+            min_files: 1
+    gate:
+      id: G2
+      checks: [outputs_exist, guardrails_scan]
+      scan_dirs: [2-solution]
+      human_approval: true
+
+  # ---------------------------------------------------------------------------
+  # FASE 3 — Preparação de Entrega
+  # ---------------------------------------------------------------------------
+  - id: "3"
+    name: "Delivery Preparation"
+    output_root: 3-delivery
+    requires_gate: G2
+    steps:
+      - id: confluence-structure
+        role: confluence-publisher
+        agent: .claude/agents/confluence-publisher.md
+        templates:
+          - _output-structure/delivery-space/confluence-page-template.md
+          - _output-structure/delivery-space/import-guide-template.md
+        outputs:
+          - path: "3-delivery/confluence/**/*.md"
+            min_files: 1
+
+      - id: jira-structure
+        role: jira-publisher
+        agent: .claude/agents/jira-publisher.md
+        templates:
+          - _output-structure/delivery-space/jira-initiative-template.md
+          - _output-structure/delivery-space/jira-epic-template.md
+          - _output-structure/delivery-space/jira-story-template.md
+          - _output-structure/delivery-space/import-guide-template.md
+        requires: [confluence-structure]
+        outputs:
+          - path: "3-delivery/jira/**/*.md"
+            min_files: 1
+    gate:
+      id: G3
+      checks: [outputs_exist, guardrails_scan]
+      scan_dirs: [3-delivery]
+      human_approval: true

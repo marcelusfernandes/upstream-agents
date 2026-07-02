@@ -1,0 +1,22 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python3 scripts/validate-gate.py *)",
+      "Bash(python3 scripts/validate-guardrails.py *)"
+    ]
+  },
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/guardrail-check.py\"",
+            "timeout": 15
+          }
+        ]
+      }
+    ]
+  }
+}

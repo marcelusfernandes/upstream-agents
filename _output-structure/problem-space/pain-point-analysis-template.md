@@ -3,7 +3,7 @@ version: "2.1.0"
 last_updated: "2025-10-16"
 author: "Marcelus Fernandes"
 template_type: "pain_point_analysis"
-used_by: ["agent-2-painpoint-analysis-specialist.md"]
+used_by: [".claude/agents/painpoint-synthesizer.md"]
 purpose: "Structure multi-dimensional pain point clustering based on relational patterns with type classification"
 changelog:
   - "v2.1.0 (2025-10-16): Updated for relationship-based clustering with type classification by Agent 2"
